@@ -38,8 +38,12 @@ final class SalleController extends AbstractController
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $salle = new Salle();
-            $salle->setNom($_POST['nom']);
-            $salle->setCapacite($_POST['capacite']);
+            // $salle->setNom($_POST['nom']);
+            // $salle->setCapacite($_POST['capacite']);
+            extract($_POST);
+            $salle->setNom($nom);
+            $salle->setCapacite($capacite);
+            
             $entity->persist($salle);
             $entity->flush();
 
