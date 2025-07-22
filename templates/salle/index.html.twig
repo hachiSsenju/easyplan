@@ -3,7 +3,7 @@
 {% block title %}Hello SalleController!{% endblock %}
 
 {% block body %}
-
+{# 
 <h1>Liste des salles</h1>
 <a href='salle/add' class='btn btn-success'>Ajouter un salle</a>
 <table class='table table-hover'>
@@ -28,5 +28,57 @@
             </tr>
         {% endfor %}
     </tbody>
-    </table>
+    </table> #}
+
+    
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">La Liste Des Salles</h5>
+             
+              <!-- Table with stripped rows -->
+              <table class="table datatable">
+                <thead>
+                  <tr>
+                   <th>
+                      <b>N°</b>
+                    </th>
+                    <th>
+                      <b>N</b>om
+                    </th>
+                    <th>Capacite</th>
+                   
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for salle in salles %}
+                  <tr>
+                  <td>{{salle.id}}</td>
+                    <td>{{salle.nom}}</td>
+                    <td>{{salle.capacite}}</td>
+                    <td>
+                        
+                         <a href="salle/delete/${{salle.id}}">Suprimer</a>
+                        <a href="salle/edit/${{salle.id}}">Editer</a>
+                    
+                    </td>
+                   
+                  </tr>
+                
+                 {% endfor %}
+                </tbody>
+              </table>
+
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
 {% endblock %}
