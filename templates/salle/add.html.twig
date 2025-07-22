@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SalleController!{% endblock %}
+
+{% block body %}
+
+<h1>Ajouter une salle</h1>
+<form method='post' action="/salle/add">
+<div class='form-group'>
+    <label for='title'>Title</label>
+    <input type='text' id='nom' name='nom' class='form-control' required>
+    <input type='number' id='capacite' name='capacite' class='form-control' required>
+    <input type='submit' value='Ajouter' class='btn btn-success'>
+    </div>
+</form>
+{% endblock %}
