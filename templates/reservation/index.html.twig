@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReservationController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<table class='table table-hover'>
+<tr>
+    <th>Id</th>
+    <th>Utilisateur</th>
+    <th>Salle</th>
+    <th>Date</th>
+    <th>Heure de début</th>
+    <th>Heure de fin</th>
+    <th>Actions</th>
+</tr>
+{% for reservation in reservations %}
+<tr>
+    <td>{{ reservation.id }}</td>
+    <td>{{ currentUser.email }}</td>
+    <td>{{ reservation.salle.nom }}</td>
+    <td>{{ reservation.date|date('Y-m-d') }}</td>
+    <td>{{ reservation.heureD|date('H:i') }}</td>
+    <td>{{ reservation.heureF|date('H:i') }}</td>
+    <td>
+        <a href="reservation/edit/{{reservation.id}}" class="btn btn-info">Modifier</a>
+        <a href="reservation/delete/{{reservation.id}}" class="btn btn-danger">Supprimer</a>
+    </td>
+{% endfor %}
+</table>
+{% endblock %}

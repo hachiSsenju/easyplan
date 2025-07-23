@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -34,9 +36,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
-    private ?Reservation $reservation = null;
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'utilisateur')]
+    private Collection $reservations;
 
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
+
+    /**
+     * @var Collection<int, Reservation>
+     */
+
+   
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -118,20 +134,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getReservation(): ?Reservation
+    /**
+     * @return Collection<int, Reservation>
+     */
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
     {
-        return $this->reservation;
+        return $this->reservations;
     }
 
-    public function setReservation(Reservation $reservation): static
+    public function addReservation(Reservation $reservation): static
     {
-        // set the owning side of the relation if necessary
-        if ($reservation->getUtilisateur() !== $this) {
-            $reservation->setUtilisateur($this);
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->addUtilisateur($this);
         }
-
-        $this->reservation = $reservation;
 
         return $this;
     }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            $reservation->removeUtilisateur($this);
+        }
+
+        return $this;
+    }
+  
+  
+
+  
 }

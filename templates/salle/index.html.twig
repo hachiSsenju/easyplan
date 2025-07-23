@@ -83,8 +83,8 @@
     </section>
 
 <div id='former' style="background: silver; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 2rem; width: 400px; margin: 2rem auto; position: fixed;top:20%;left:70%;  display:{{showForm}}">
-    <h1>Modifier la salle : </h1>
   {% if salle is defined and salle is not null %}
+    <h2>Modifier la salle : {{salle.nom}}</h2>
     <p>id : {{salle.id}}</p>
     <form method='post' action="/salle/edit/{{salle.id}}">
       <div class='form-group form-group-lg mt-6 col-md-12'>
