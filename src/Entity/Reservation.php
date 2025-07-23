@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,10 +28,19 @@ class Reservation
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $heureF = null;
 
-    #[ORM\OneToOne(inversedBy: 'reservation', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $utilisateur = null;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'reservations')]
+    private Collection $utilisateur;
 
+    public function __construct()
+    {
+        $this->utilisateur = new ArrayCollection();
+    }
+
+   
+ 
        public function getId(): ?int
     {
         return $this->id;
@@ -83,17 +94,36 @@ class Reservation
         return $this;
     }
 
-    public function getUtilisateur(): ?User
+    /**
+     * @return Collection<int, USer>
+     */
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUtilisateur(): Collection
     {
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(User $utilisateur): static
+    public function addUtilisateur(User $utilisateur): static
     {
-        $this->utilisateur = $utilisateur;
+        if (!$this->utilisateur->contains($utilisateur)) {
+            $this->utilisateur->add($utilisateur);
+        }
 
         return $this;
     }
+
+    public function removeUtilisateur(User $utilisateur): static
+    {
+        $this->utilisateur->removeElement($utilisateur);
+
+        return $this;
+    }
+ 
+
+  
 
    
 }
