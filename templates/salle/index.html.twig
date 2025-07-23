@@ -62,8 +62,8 @@
                     <td>{{salle.capacite}}</td>
                     <td>
                         
-                         <a href="salle/delete/{{salle.id}}">Suprimer</a>
-                        <a href="salle/edit/{{salle.id}}">Editer</a>
+                         <a href="/salle/delete/{{salle.id}}">Suprimer</a>
+                        <a href="/salle/edit/{{salle.id}}">Editer</a>
                     
                     </td>
                    
@@ -81,4 +81,32 @@
         </div>
       </div>
     </section>
+
+<div id='former' style="background: silver; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 2rem; width: 400px; margin: 2rem auto; position: fixed;top:20%;left:70%;  display:{{showForm}}">
+    <h1>Modifier la salle : </h1>
+  {% if salle is defined and salle is not null %}
+    <p>id : {{salle.id}}</p>
+    <form method='post' action="/salle/edit/{{salle.id}}">
+      <div class='form-group form-group-lg mt-6 col-md-12'>
+        <label for='nom'>Nom de la salle</label>
+        <input type='text' id='nom' name='nom' class='form-control' required value="{{ salle.nom }}"/>
+        <label for='capacite'>Capacité de la salle</label>
+        <input type='number' id='capacite' name='capacite' class='form-control' required value="{{ salle.capacite }}"/>
+        <input type='submit' value='Enregistrer' class='btn btn-success mt-3'/>
+        <a href="/salle" class='btn btn-warning mt-3'>Annuler</a>
+      </div>
+    </form>
+  {% else %}
+    <div class="alert alert-warning">Aucune salle sélectionnée pour modification.</div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+    function cancel() {
+      alert();
+        document.getElementById('former').style.display = 'none';
+    }
+    </script>
 {% endblock %}

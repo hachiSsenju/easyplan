@@ -17,20 +17,42 @@ final class SalleController extends AbstractController
     {
         return $this->render('salle/index.html.twig', [
             'salles' => $salle_repository->findAll(),
+            'showForm' => 'none'
         ]);
     }
-    #[Route('/salle/edit/{id}', name: 'adit_salle')]
-    public function edit(SalleRepository $salle_repository): Response
+    #[Route('/salle/edit/{id}', name: 'edit_salle')]
+    public function edit(SalleRepository $salle_repository,int $id, EntityManagerInterface $entity): Response
     {
+        $idS= intval($id);
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $salle = $salle_repository->find($idS);
+            $salle->setNom($_POST['nom']);
+            $salle->setCapacite($_POST['capacite']);
+            $entity->persist($salle);
+            $entity->flush();
+
+            return $this->redirectToRoute('app_salle');
+        }
+        // $salle = $salle_repository->find($idS);
         return $this->render('salle/index.html.twig', [
+            'salle' => $salle_repository->find($idS),
             'salles' => $salle_repository->findAll(),
+            'showForm' => 'block'
         ]);
     }
-    #[Route('salle/delete/{id}', name: 'adit_salle')]
-    public function delete(SalleRepository $salle_repository): Response
+    #[Route('salle/delete/{id}', name: 'delete_salle')]
+    public function delete(int $id,SalleRepository $salle_repository,EntityManagerInterface $entityManager): Response
     {
+        $idS = intval($id);
+        $salle = $salle_repository->find($idS);
+        if ($salle) {
+            $entityManager->remove($salle);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_salle');
+        }
         return $this->render('salle/index.html.twig', [
             'salles' => $salle_repository->findAll(),
+            'showForm' => 'none'
         ]);
     }
     #[Route('/salle/add', name: 'add_salle')]
@@ -52,6 +74,7 @@ final class SalleController extends AbstractController
 
         return $this->render('salle/add.html.twig', [
             // 'salles' => $salle_repository->findAll(),
+            'showForm' => 'none'
         ]);
     }
 }
