@@ -22,8 +22,10 @@ final class ReservationController extends AbstractController
     {
         $user = $this->getUser()->getUserIdentifier();
         $userEntity = $userRepository->findOneBy(['email' => $user]);
+        $userReservations = $userEntity->getReservations();
         return $this->render('reservation/index.html.twig', [
             'reservations' => $reservations->findAll(),
+            'userReservations' => $userReservations,
             'currentUser' => $userEntity,
         ]);
     }

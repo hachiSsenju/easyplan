@@ -18,6 +18,24 @@
     <th>Heure de fin</th>
     <th>Actions</th>
 </tr>
+
+{% for reservation in reservations %}
+<tr>
+    <td>{{ reservation.id }}</td>
+    <td>{{ currentUser.email }}</td>
+    <td>{{ reservation.salle.nom }}</td>
+    <td>{{ reservation.date|date('Y-m-d') }}</td>
+    <td>{{ reservation.heureD|date('H:i') }}</td>
+    <td>{{ reservation.heureF|date('H:i') }}</td>
+    <td>
+        <a href="/reservation/edit/{{reservation.id}}" class="btn btn-info">Modifier</a>
+        <a href="/reservation/delete/{{reservation.id}}" class="btn btn-danger">Supprimer</a>
+    </td>
+{% endfor %}
+
+
+
+
 {% for reservation in reservations %}
 <tr>
     <td>{{ reservation.id }}</td>
