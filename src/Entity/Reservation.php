@@ -28,16 +28,16 @@ class Reservation
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTime $heureF = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'reservations')]
-    private Collection $utilisateur;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $utilisateur = null;
 
-    public function __construct()
-    {
-        $this->utilisateur = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Salle $salle = null;
+
+
+   
 
    
  
@@ -48,12 +48,12 @@ class Reservation
 
     public function getSalle(): ?Salle
     {
-        return $this->Salle;
+        return $this->salle;
     }
 
     public function setSalle(?Salle $Salle): static
     {
-        $this->Salle = $Salle;
+        $this->salle = $Salle;
 
         return $this;
     }
@@ -101,26 +101,23 @@ class Reservation
     /**
      * @return Collection<int, User>
      */
-    public function getUtilisateur(): Collection
+
+    public function getUtilisateur(): ?User
     {
         return $this->utilisateur;
     }
 
-    public function addUtilisateur(User $utilisateur): static
+    public function setUtilisateur(?User $utilisateur): static
     {
-        if (!$this->utilisateur->contains($utilisateur)) {
-            $this->utilisateur->add($utilisateur);
-        }
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
 
-    public function removeUtilisateur(User $utilisateur): static
-    {
-        $this->utilisateur->removeElement($utilisateur);
 
-        return $this;
-    }
+
+  
+   
  
 
   

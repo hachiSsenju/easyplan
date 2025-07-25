@@ -24,14 +24,13 @@ class Salle
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'Salle')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'salle', orphanRemoval: true)]
     private Collection $reservations;
 
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +63,10 @@ class Salle
     /**
      * @return Collection<int, Reservation>
      */
+
+    /**
+     * @return Collection<int, Reservation>
+     */
     public function getReservations(): Collection
     {
         return $this->reservations;
@@ -90,4 +93,7 @@ class Salle
 
         return $this;
     }
+
+
+  
 }
