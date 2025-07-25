@@ -27,8 +27,8 @@
     <td>{{ reservation.heureD|date('H:i') }}</td>
     <td>{{ reservation.heureF|date('H:i') }}</td>
     <td>
-        <a href="reservation/edit/{{reservation.id}}" class="btn btn-info">Modifier</a>
-        <a href="reservation/delete/{{reservation.id}}" class="btn btn-danger">Supprimer</a>
+        <a href="/reservation/edit/{{reservation.id}}" class="btn btn-info">Modifier</a>
+        <a href="/reservation/delete/{{reservation.id}}" class="btn btn-danger">Supprimer</a>
     </td>
 {% endfor %}
 </table>

@@ -39,7 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\ManyToMany(targetEntity: Reservation::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'utilisateur', orphanRemoval: true)]
     private Collection $reservations;
 
     public function __construct()
@@ -47,6 +47,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reservations = new ArrayCollection();
     }
 
+  
+   
     /**
      * @var Collection<int, Reservation>
      */
@@ -141,6 +143,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Reservation>
      */
+
+    /**
+     * @return Collection<int, Reservation>
+     */
     public function getReservations(): Collection
     {
         return $this->reservations;
@@ -150,7 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
-            $reservation->addUtilisateur($this);
+            $reservation->setUtilisateur($this);
         }
 
         return $this;
@@ -159,7 +165,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeReservation(Reservation $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
-            $reservation->removeUtilisateur($this);
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUtilisateur() === $this) {
+                $reservation->setUtilisateur(null);
+            }
         }
 
         return $this;
