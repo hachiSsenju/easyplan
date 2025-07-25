@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SalleController!{% endblock %}
+
+{% block body %}
+
+<h1>Ajouter une Réservation</h1>
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger text-center">
+        {{ message }}
+    </div>
+{% endfor %}
+<form method='post' action="/reservation/edit/{{ reservation.id }}">
+<div class='form-group form-group-lg mt-6 col-md-4'>
+    <label for='salle'>Salle</label>
+  <select name='salle' class='form-control' required value="{{ reservation.salle.id }}">
+  {% for salle in salles %}
+<option value ='{{ salle.id}}'>{{reservation.salle.nom}}</option>
+{% endfor %} 
+</select>
+<label for='date'>Date de la réservation</label>
+<input type="date" name="date" class="form-control" required value="{{ reservation.date|date('Y-m-d') }}">
+
+<label for='heureD'>Heure de debut</label>
+<input type="time" name="heureD" class="form-control" required value="{{ reservation.heureD|date('H:i') }}">
+
+<label for='heureF'>Heure de fin</label>
+<input type="time" name="heureF" class="form-control" required value="{{ reservation.heureF|date('H:i') }}">
+<input type='submit' value='Ajouter' class='btn btn-success mt-3'>
+    </div>
+</form> 
+
+
+
+
+{% endblock %}

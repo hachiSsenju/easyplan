@@ -32,8 +32,13 @@
                 <td>{{ reservation.date }}</td>
                 <td>{{ reservation.heureD }}</td>
                 <td>{{ reservation.heureF }}</td>
-                <td style='{{ reservation.status == 'created' ? 'color: green' : 'color:red'  }}'>{{reservation.status}}</td>
-            </tr>
+               <td style="{% if reservation.status == 'Ajoutée' %}color: green
+            {% elseif reservation.status == 'Supprimée' %}color: red
+            {% elseif reservation.status == 'Mise a jour' %}color: blue
+            {% endif %}">
+    {{ reservation.status }}
+</td>
+      </tr>
         {% endfor %}
     {% else %}
         <tr><td colspan="6">Aucune réservation trouvée.</td></tr>

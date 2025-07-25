@@ -42,7 +42,7 @@ final class ReservationController extends AbstractController
                 'heureD' => $reservation->getHeureD()->format('H:i'),
                 'heureF' => $reservation->getHeureF()->format('H:i'),
                 'user' => $reservation->getUtilisateur()->getEmail(),
-                'status' => 'deleted'
+                'status' => 'Supprimée'
             ];
             $historique->setReservation([$deletedReservation]);
             $entityManager->persist($historique);
@@ -144,7 +144,7 @@ final class ReservationController extends AbstractController
                     'heureD' => $reservation->getHeureD()->format('H:i'),
                     'heureF' => $reservation->getHeureF()->format('H:i'),
                     'user' => $userEntity->getEmail(),
-                    'status' => 'created'
+                    'status' => 'Ajoutée'
                 ];
                 $historique->setReservation([$newReservation]);
                 $entityManager->persist($historique);
@@ -165,7 +165,7 @@ final class ReservationController extends AbstractController
 
 
 
-    #[Route('/reservation/edit/{id}', name: 'add_reservation')]
+    #[Route('/reservation/edit/{id}', name: 'edit_reservation')]
     public function edit(
         SalleRepository $salles,
         UserRepository $userRepository,
@@ -176,8 +176,8 @@ final class ReservationController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->getUser()->getUserIdentifier();
             $userEntity = $userRepository->findOneBy(['email' => $user]);
-
-            $salleId = intval($id);
+            // $resId = intval($id);
+            $salleId = intval($_POST['salle']);
             $salle = $salles->find($salleId);
 
             if ($salle && $userEntity) {
@@ -185,17 +185,20 @@ final class ReservationController extends AbstractController
                 $heureD = new \DateTime($_POST['date'] . ' ' . $_POST['heureD']);
                 $heureF = new \DateTime($_POST['date'] . ' ' . $_POST['heureF']);
 
-                $conflit = $reservationRepository->createQueryBuilder('r')
-                    ->where('r.Salle = :salle')
-                    ->andWhere('r.date = :date')
-                    ->andWhere('r.heureD < :heureF')
-                    ->andWhere('r.heureF > :heureD')
-                    ->setParameter('salle', $salle)
-                    ->setParameter('date', $date)
-                    ->setParameter('heureD', $heureD)
-                    ->setParameter('heureF', $heureF)
-                    ->getQuery()
-                    ->getResult();
+               $conflit = $reservationRepository->createQueryBuilder('r')
+    ->where('r.Salle = :salle')
+    ->andWhere('r.date = :date')
+    ->andWhere('r.heureD < :heureF')
+    ->andWhere('r.heureF > :heureD')
+    ->andWhere('r.id != :currentId') // <-- exclude the current reservation from conflict check
+    ->setParameter('salle', $salle)
+    ->setParameter('date', $date)
+    ->setParameter('heureD', $heureD)
+    ->setParameter('heureF', $heureF)
+    ->setParameter('currentId', $id)
+    ->getQuery()
+    ->getResult();
+
 
                 if ($conflit) {
                     $message = 'La salle est déjà réservée pour cet horaire. Horaires déjà réservés: ';
@@ -216,7 +219,7 @@ final class ReservationController extends AbstractController
                 }
 
                 // Aucune collision, créer la réservation
-                $reservation = new Reservation();
+                $reservation = $reservationRepository->find($id);
                 $reservation->setSalle($salle);
                 $userEntity->addReservation($reservation);
                 $reservation->setDate($date);
@@ -245,7 +248,7 @@ final class ReservationController extends AbstractController
                     'heureD' => $reservation->getHeureD()->format('H:i'),
                     'heureF' => $reservation->getHeureF()->format('H:i'),
                     'user' => $userEntity->getEmail(),
-                    'status' => 'created'
+                    'status' => 'Mise a jour'
                 ];
                 $historique->setReservation([$newReservation]);
                 $entityManager->persist($historique);
@@ -257,7 +260,8 @@ final class ReservationController extends AbstractController
         }
 
         return $this->render('reservation/edit.html.twig', [
-            'salle' => $salles->find($salleId),
+            'reservation' => $reservationRepository->find($id),
+            'salles' => $salles->findAll(),
         ]);
     }
 }
