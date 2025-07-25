@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 final class ReservationController extends AbstractController
 {
@@ -264,4 +265,33 @@ final class ReservationController extends AbstractController
             'salles' => $salles->findAll(),
         ]);
     }
+   #[Route('/reservation/planning', name: 'planning_reservation')]
+public function detailReservation(Request $request, ReservationRepository $reservationRepository): Response
+{
+    $startParam = $request->query->get('start');
+    $endParam = $request->query->get('end');
+
+    try {
+        $start = $startParam ? new \DateTime($startParam) : (new \DateTime())->setTime(0, 0);
+        $end = $endParam ? new \DateTime($endParam) : (clone $start)->modify('+7 days');
+    } catch (\Exception $e) {
+        return new Response('Date invalide.', 400);
+    }
+
+    $reservations = $reservationRepository->findReservationsGroupedByDate($start, $end);
+
+    // 🔄 Regrouper par jour
+    $grouped = [];
+    foreach ($reservations as $r) {
+        $dateKey = $r['date']->format('Y-m-d');
+        $grouped[$dateKey][] = $r;
+    }
+
+    return $this->render('reservation/planning.html.twig', [
+        'reservationsByDate' => $grouped,
+        'start' => $start,
+        'end' => $end,
+    ]);
+}
+
 }

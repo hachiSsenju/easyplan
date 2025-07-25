@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250724232103 extends AbstractMigration
+final class Version20250725181354 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,6 +20,7 @@ final class Version20250724232103 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE historique (id SERIAL NOT NULL, reservation JSON NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE reservation (id SERIAL NOT NULL, salle_id INT DEFAULT NULL, utilisateur_id INT NOT NULL, date DATE NOT NULL, heure_d TIME(0) WITHOUT TIME ZONE NOT NULL, heure_f TIME(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_42C84955DC304035 ON reservation (salle_id)');
         $this->addSql('CREATE INDEX IDX_42C84955FB88E14F ON reservation (utilisateur_id)');
@@ -51,6 +52,7 @@ final class Version20250724232103 extends AbstractMigration
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE reservation DROP CONSTRAINT FK_42C84955DC304035');
         $this->addSql('ALTER TABLE reservation DROP CONSTRAINT FK_42C84955FB88E14F');
+        $this->addSql('DROP TABLE historique');
         $this->addSql('DROP TABLE reservation');
         $this->addSql('DROP TABLE salle');
         $this->addSql('DROP TABLE "user"');
