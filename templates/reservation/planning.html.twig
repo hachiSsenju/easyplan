@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning des Réservations{% endblock %}
+
+{% block body %}
+<h2 style="color: #2c3e50; margin-bottom: 25px;">
+    <i class="fas fa-calendar-alt" style="color: #3498db;"></i> Planning des réservations de salle par jour
+</h2>
+
+{% if reservationsByDate is not empty %}
+    {% for date, reservations in reservationsByDate %}
+        <h3 style="color: #34495e; margin-top: 30px;">
+            <i class="fas fa-calendar-day" style="color: #3498db;"></i>
+            {{ date|date('d-m-Y') }}
+        </h3>
+        <ul style="padding-left: 0;">
+            {% for r in reservations %}
+                <li style="
+                    background-color: #f9f9f9;
+                    margin-bottom: 15px;
+                    list-style: none;
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    transition: background-color 0.3s ease;
+                "
+                onmouseover="this.style.backgroundColor='#eef6fb'"
+                onmouseout="this.style.backgroundColor='#f9f9f9'">
+                    
+                    <p style="margin: 5px 0;">
+                        <i class="fas fa-door-open" style="color: #3498db; width: 20px;"></i>
+                        <strong>Salle :</strong> {{ r['salle'] }}
+                    </p>
+                    
+                    <p style="margin: 5px 0;">
+                        <i class="fas fa-user" style="color: #3498db; width: 20px;"></i>
+                        <strong>Utilisateur :</strong> {{ r['utilisateur'] }}
+                    </p>
+                    
+                    <p style="margin: 5px 0;">
+                        <i class="fas fa-clock" style="color: #3498db; width: 20px;"></i>
+                        <strong>Heure :</strong> {{ r['heureDebut']|date('H:i') }} - {{ r['heureFin']|date('H:i') }}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% else %}
+    <p style="color: #e74c3c;"> Aucune réservation dans cette période.</p>
+{% endif %}
+{% endblock %}
