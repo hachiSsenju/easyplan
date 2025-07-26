@@ -50,27 +50,32 @@
                       <b>N</b>om
                     </th>
                     <th>Capacite</th>
+                    <th>Disponibilité</th>
                    
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                 {% for salle in salles %}
-                  <tr>
-                  <td>{{salle.id}}</td>
-                    <td>{{salle.nom}}</td>
-                    <td>{{salle.capacite}}</td>
-                    <td>
-                        
-                         <a href="/salle/delete/{{salle.id}}">Suprimer</a>
-                        <a href="/salle/edit/{{salle.id}}">Editer</a>
-                    
-                    </td>
-                   
-                  </tr>
-                
-                 {% endfor %}
-                </tbody>
+  {% for salle in salles %}
+    <tr>
+      <td>{{ salle.id }}</td>
+      <td>{{ salle.nom }}</td>
+      <td>{{ salle.capacite }}</td>
+      <td>
+        {% if salle in dispo %}
+          <span style="color: green;">Disponible</span>
+        {% else %}
+          <span style="color: red;">Indisponible</span>
+        {% endif %}
+      </td>
+      <td>
+        <a href="/salle/delete/{{ salle.id }}">Supprimer</a>
+        <a href="/salle/edit/{{ salle.id }}">Éditer</a>
+      </td>
+    </tr>
+  {% endfor %}
+</tbody>
+
               </table>
 
               <!-- End Table with stripped rows -->

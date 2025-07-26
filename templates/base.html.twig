@@ -257,16 +257,16 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-      {# <li class="nav-item">
-        <a class="nav-link " href="index.html">
+      <li class="nav-i">
+        <a class="nav-link " href="/">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-      </li><!-- End Dashboard Nav --> #}
+      </li><!-- End Dashboard Nav -->
 
      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-book"></i><span>Rservation</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-book"></i><span>Reservation</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -275,12 +275,20 @@
              <span>Ajouter</span>
             </a>
           </li>
-          
+          {% if is_granted('ROLE_ADMIN')%}
           <li>
             <a href="/reservation">
-             <span>Lister</span>
+             <span>Lister (admin) </span>
             </a>
           </li>
+          {% endif %}
+          {% if is_granted('ROLE_USER')%}
+          <li>
+            <a href="/reservation/user">
+             <span>Lister (user)</span>
+            </a>
+          </li>
+          {% endif %}
           <li>
             <a href="/reservation/history">
              <span>Historique</span>
