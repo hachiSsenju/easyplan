@@ -36,7 +36,18 @@
 </div> #}
  <section class="section dashboard">
       <div class="row">
-
+         <div class="bg-gray-100 p-6 rounded shadow">
+        {% if user %}
+            <p>Connecté en tant que : <strong>{{ user.email }}</strong></p>
+            <a href="{{ path('app_logout') }}" class="text-red-500 hover:underline">Se déconnecter</a>
+        {% else %}
+            <p>Vous n'êtes pas connecté.</p>
+            <div class="space-x-4 mt-2">
+                <a href="{{ path('app_login') }}" class="text-blue-500 hover:underline">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="text-green-500 hover:underline">Créer un compte</a>
+            </div>
+        {% endif %}
+    </div>
         <!-- Left side columns -->
         <div class="col-lg-12">
           <div class="row">
