@@ -28,6 +28,17 @@ final class ReservationController extends AbstractController
             'currentUser' => $userEntity,
         ]);
     }
+    #[Route('/reservation/user', name: 'app_reservation_user')]
+    public function indexuser(ReservationRepository $reservations, UserRepository $userRepository): Response
+    {
+        $user = $this->getUser()->getUserIdentifier();
+        $userEntity = $userRepository->findOneBy(['email' => $user]);
+        
+        return $this->render('reservation/indexUser.html.twig', [
+            'reservations' => $userEntity->getReservations(),
+            'currentUser' => $userEntity,
+        ]);
+    }
     #[Route('/reservation/delete/{id}', name: 'delete_reservation')]
     public function delete(ReservationRepository $reservations, EntityManagerInterface $entityManager, int $id, UserRepository $userRepository): Response
     {

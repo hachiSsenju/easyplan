@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Tableau de bord</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white shadow rounded p-6 text-center">
+            <h2 class="text-xl font-semibold">Total Classes</h2>
+            <p class="text-4xl font-bold text-blue-600 mt-2">{{ totalSalles }}</p>
+        </div>
+        <div class="bg-white shadow rounded p-6 text-center">
+            <h2 class="text-xl font-semibold">Total Utilisateurs</h2>
+            <p class="text-4xl font-bold text-green-600 mt-2">{{ totalUsers }}</p>
+        </div>
+        <div class="bg-white shadow rounded p-6 text-center">
+            <h2 class="text-xl font-semibold">Total Réservations</h2>
+            <p class="text-4xl font-bold text-red-600 mt-2">{{ totalReservations }}</p>
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/MSI/Desktop/Grigra/php/easyplan/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/MSI/Desktop/Grigra/php/easyplan/templates/home/index.html.twig</code></li>
-    </ul>
+    <div class="bg-gray-100 p-6 rounded shadow">
+        {% if user %}
+            <p>Connecté en tant que : <strong>{{ user.email }}</strong></p>
+            <a href="{{ path('app_logout') }}" class="text-red-500 hover:underline">Se déconnecter</a>
+        {% else %}
+            <p>Vous n'êtes pas connecté.</p>
+            <div class="space-x-4 mt-2">
+                <a href="{{ path('app_login') }}" class="text-blue-500 hover:underline">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="text-green-500 hover:underline">Créer un compte</a>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
